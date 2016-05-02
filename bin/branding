@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'branding'
+
+cli = Branding::CLI.new(ARGV)
+cli.run
