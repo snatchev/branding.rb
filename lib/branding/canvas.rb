@@ -1,5 +1,4 @@
 require 'branding/ansi'
-require 'matrix'
 
 module Branding
   class Canvas
@@ -12,18 +11,8 @@ module Branding
     end
 
     def load(pixels)
-      #for regular pixel
-      #pixels.each do |pixel|
-      #  self << pixel
-      #end
-      @matrix = Matrix.build(height, width) do |row, col|
-        pixels[col + row*width]
-      end
-
-      (0..height).step(2) do |row|
-        @matrix.minor(row,2,0,width).transpose.to_a.each do |block|
-          @pixel_buffer << Pixel2x.new(block)
-        end
+      Pixel2x.load_strategy(pixels, width: width, height: height) do |pixel|
+        @pixel_buffer << pixel
       end
     end
 
@@ -38,7 +27,7 @@ module Branding
         end
 
         if idx % max_width == 0
-          STDOUT.print("#{ANSI.reset}\n")
+          STDOUT.puts(ANSI.reset)
         end
 
         STDOUT.print(pixel)
