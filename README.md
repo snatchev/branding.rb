@@ -1,6 +1,6 @@
 # Branding
 
-TODO: Write a gem description
+Add some bling to your terminal. Branding has 1 dependency and is less than 300 lines of code.
 
 ## Installation
 
@@ -12,18 +12,14 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+## How it works
 
-    $ gem install branding
+Branding will detect your Rails application's favicon. It adds a small
+initializer in development and testing environments that draws the favicon with
+ANSI control characters.
 
 ## Usage
 
-TODO: Write usage instructions here
+Continue your normal workflow.
 
 ## Contributing
-
-1. Fork it ( http://github.com/<my-github-username>/branding/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
