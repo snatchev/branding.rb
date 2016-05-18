@@ -2,11 +2,11 @@ require 'branding/ansi'
 
 module Branding
   class Canvas
-    attr_reader :width, :height, :cols
+    attr_reader :width, :height, :rows, :cols
 
     def initialize(width:,height:)
       @width, @height = width, height
-      @cols = `stty size`.split.map { |x| x.to_i }.last
+      @rows, @cols = `stty size`.split.map { |x| x.to_i }
       @pixel_buffer = []
     end
 
