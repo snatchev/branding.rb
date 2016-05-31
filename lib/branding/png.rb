@@ -26,28 +26,126 @@ module Branding
       ##
       # yields byte
       def each
-        idx = 0
-#       bytes_in_scanline = @scanline_width * @color_channels
-
         @inflated.each_byte do |byte|
-          # new scanline. Go to next one.
-          #if idx % bytes_in_scanline == 0 && byte == 0x00
-            #idx = 0
-            #next
-          #end
           yield byte
-          idx += 1
-        end
-      end
-
-      def each_pixel
-        each_slice(@color_channels) do |r, g, b, a|
-          yield Pixel.new(r,g,b,a)
         end
       end
 
       def each_scanline
-        enum_for(:each_pixel).to_a.each_slice(@scanline_width)
+        bytes_in_scanline = @scanline_width * @color_channels + 1 #the number of bytes is +1 because of the filter byte
+        previous_scanline = nil
+
+        each_slice(bytes_in_scanline) do |scanline|
+          filter_bit, *rest = *scanline
+          filter = Filter.new(filter_bit, rest, previous_scanline, @color_channels)
+
+          recon = filter.reconstructed_scanline
+          yield recon
+          previous_scanline = recon
+        end
+      end
+
+      def each_pixel
+        each_scanline do |scanline|
+          scanline.each_slice(@color_channels) do |*rgba|
+            yield Pixel.new(*rgba)
+          end
+        end
+      end
+    end
+
+    ##
+    # private class to handle reconstructing filtered data
+    # https://www.w3.org/TR/PNG/#9Filters
+    class Filter
+      ##
+      #
+      def initialize(filter_bit, filtered_scanline, previous_scanline, color_channels)
+        @type = filter_bit
+        @filtered = filtered_scanline
+        @previous = previous_scanline || []
+        @pixel_width = color_channels
+        @position = 0
+      end
+
+      ##
+      # yields a reconstructed byte
+      def reconstructed_scanline
+        @reconstructed_scanline = []
+        @filtered.each do |byte|
+          recon = case @type
+          when 0
+            none(byte)
+          when 1
+            sub(byte)
+          when 2
+            up(byte)
+          when 3
+            average(byte)
+          when 4
+            paeth(byte)
+          end
+
+          @reconstructed_scanline << (recon % 0xff)
+          @position += 1
+        end
+
+        @reconstructed_scanline
+      end
+
+      # a: the byte corresponding to x in the pixel immediately before the pixel
+      # containing x (or the byte immediately before x, when the bit depth is
+      # less than 8)
+      def a
+        offset = @position - @pixel_width
+        return 0x00 if offset < 0
+
+        @reconstructed_scanline[offset]
+      end
+
+      def b
+        @previous[@position] || 0x00
+      end
+
+      def c
+        offset = @position - @pixel_width
+        return 0x00 if offset < 0
+
+        @previous[offset]
+      end
+
+      def none(x)
+        x
+      end
+
+      def sub(x)
+        x + a
+      end
+
+      def up(x)
+        x + b
+      end
+
+      def average(x)
+        x + ((a + b) / 2.0).floor
+      end
+
+      # https://www.w3.org/TR/PNG/#9Filter-type-4-Paeth
+      def paeth(x)
+        x + paeth_predictor(a,b,c)
+      end
+
+      def paeth_predictor(a,b,c)
+        p = a + b - c
+        pa = (p - a).abs
+        pb = (p - b).abs
+        pc = (p - c).abs
+
+        return a if pa <= pb && pa <= pc
+
+        return b if pb <= pc
+
+        c
       end
     end
 
