@@ -11,14 +11,10 @@ module Branding
     end
 
     def load(pixels)
-      Pixel2x.load_strategy(pixels, width: width, height: height) do |pixel|
+      Pixel.load_strategy(pixels, width: width, height: height) do |pixel|
         @pixel_buffer << pixel
       end
     end
-
-    ##
-    # pixel is a 32bit number.
-    # eventually it can attempt to handle any kind of pixel
 
     def print
       @pixel_buffer.each_with_index do |pixel, idx|

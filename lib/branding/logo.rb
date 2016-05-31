@@ -1,9 +1,7 @@
-require 'chunky_png'
-
 module Branding
   class Logo
     def initialize(path)
-      @img = ChunkyPNG::Image.from_file(path)
+      @img = PNG.from_file(path)
       @canvas = Canvas.new(width: @img.width, height: @img.height)
     end
 
