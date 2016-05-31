@@ -86,7 +86,7 @@ module Branding
             paeth(byte)
           end
 
-          @reconstructed_scanline << (recon % 0xff)
+          @reconstructed_scanline << (recon % 256)
           @position += 1
         end
 
