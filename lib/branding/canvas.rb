@@ -11,7 +11,7 @@ module Branding
     end
 
     def load(pixels)
-      Pixel.load_strategy(pixels, width: width, height: height) do |pixel|
+      Pixel2x.load_strategy(pixels, width: width, height: height) do |pixel|
         @pixel_buffer << pixel
       end
     end

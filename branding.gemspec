@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'branding'
   spec.version       = Branding::VERSION
   spec.authors       = ['Stefan Natchev']
-  spec.email         = ['snatchev@twitter.com']
-  spec.summary       = 'TODO: Write a short summary. Required.'
-  spec.description   = 'TODO: Write a longer description. Optional.'
-  spec.homepage      = ''
+  spec.email         = ['stefan.natchev@gmail.com']
+  spec.summary       = 'Print your logo to the terminal.'
+  spec.description   = 'Proud of your work? Add some branding bling with Branding.rb'
+  spec.homepage      = 'https://github.com/snatchev/branding.rb'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
