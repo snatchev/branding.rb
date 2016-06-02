@@ -1,7 +1,6 @@
 module Branding
   ##
-  # This is an API wrapper around ChunkyPNG until this library implements its
-  # own PNG decoding.
+  # This is a simple PNG decoder, inspired and adapted from ChunkyPNG
   class PNG
     SIGNATURE = [137, 80, 78, 71, 13, 10, 26, 10].pack('C8').force_encoding('BINARY')
 
@@ -195,18 +194,6 @@ module Branding
       else
         imagedata.enum_for(:each_pixel).to_a
       end
-    end
-
-    def headers
-      {
-        width: width,
-        height: height,
-        depth: depth,
-        color: color,
-        compression: compression,
-        filtering: filtering,
-        interlace: interlace
-      }
     end
 
     ##
