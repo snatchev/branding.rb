@@ -7,10 +7,12 @@ module Branding
           rows, cols = Canvas.terminal_size
           ideal_width = cols / 6
 
-          logo = Branding::Logo.new(Branding::Railtie.best_icon(ideal_width))
-          logo.algo = :hires
-          logo.print
-          print "\n"
+          if icon_path = Branding::Railtie.best_icon(ideal_width)
+            logo = Branding::Logo.new(icon_path)
+            logo.algo = :hires
+            logo.print
+            print "\n"
+          end
         rescue
           # We don't want to do anything if this causes an exception. Your time
           # is too valuable to be dealing with busted amusement gems.
@@ -27,6 +29,7 @@ module Branding
       end
 
       if paths.empty?
+        nil
       else
         paths.first
       end

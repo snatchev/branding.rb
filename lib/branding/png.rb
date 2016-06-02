@@ -1,3 +1,5 @@
+require 'zlib'
+
 module Branding
   ##
   # This is a simple PNG decoder, inspired and adapted from ChunkyPNG
