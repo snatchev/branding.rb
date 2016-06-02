@@ -4,14 +4,34 @@ module Branding
   class Canvas
     attr_reader :width, :height, :rows, :cols
 
-    def initialize(width:,height:)
+    def self.terminal_size
+      # TODO: make sure we can get this on linux
+      begin
+        `stty size`.split.map(&:to_i)
+      rescue
+        [40, 100]
+      end
+    end
+
+    def initialize(width:, height:)
       @width, @height = width, height
-      @rows, @cols = `stty size`.split.map { |x| x.to_i }
+      @rows, @cols = self.class.terminal_size
       @pixel_buffer = []
     end
 
-    def load(pixels)
-      Pixel2x.load_strategy(pixels, width: width, height: height) do |pixel|
+    def load(pixels, algo: :normal)
+      case algo
+      when :normal
+        klass = Pixel
+      when :hires
+        klass = Pixel2x
+      when :hicolor
+        raise 'Hi-Color coming soon!'
+      else
+        raise "Unknown pixel algo `#{algo}`"
+      end
+
+      klass.load_strategy(pixels, width: width, height: height) do |pixel|
         @pixel_buffer << pixel
       end
     end

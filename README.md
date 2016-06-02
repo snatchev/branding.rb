@@ -6,17 +6,19 @@ Proud of your code? Add some bling to your terminal.
 
 * No dependencies!
 * Pure Ruby PNG decoding in < 200 LoC
+* Hi-Res mode for 2x pixel density!
+* Hi-Color mode for 720 colors!!
 * Loads of fun!
 
 ## Quality
 
-Much quality:
+Much quality.
 
 ## How it works
 
 Branding will detect your Rails application's favicon. It adds a small
 initializer in development and testing environments that draws the favicon with
-ANSI control characters.
+ANSI control characters whenever you run tests, a rake task or boot the console.
 
 ## Installation
 
