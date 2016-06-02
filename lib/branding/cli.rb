@@ -29,7 +29,7 @@ module Branding
 
     def run
       logo = Branding::Logo.new(@options.file)
-      logo.algo = @options.algo
+      logo.algo = @options.algo if @options.algo
       logo.print
     end
   end
