@@ -14,7 +14,7 @@ module Branding
     class Imagedata
       include Enumerable
 
-      def initialize(data:, scanline_width:, color_channels: )
+      def initialize(data: nil, scanline_width: 0, color_channels: 3)
         @scanline_width = scanline_width
         @color_channels = color_channels
 
@@ -33,7 +33,9 @@ module Branding
       end
 
       def each_scanline
-        bytes_in_scanline = @scanline_width * @color_channels + 1 #the number of bytes is +1 because of the filter byte
+        # the number of bytes is + 1 because of the filter byte
+        bytes_in_scanline = @scanline_width * @color_channels + 1
+
         previous_scanline = nil
 
         each_slice(bytes_in_scanline) do |scanline|
@@ -133,10 +135,10 @@ module Branding
 
       # https://www.w3.org/TR/PNG/#9Filter-type-4-Paeth
       def paeth(x)
-        x + paeth_predictor(a,b,c)
+        x + paeth_predictor(a, b, c)
       end
 
-      def paeth_predictor(a,b,c)
+      def paeth_predictor(a, b, c)
         p = a + b - c
         pa = (p - a).abs
         pb = (p - b).abs

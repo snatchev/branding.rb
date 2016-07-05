@@ -6,15 +6,15 @@ module Branding
 
     def self.terminal_size
       # TODO: make sure we can get this on linux
-      begin
-        `stty size`.split.map(&:to_i)
-      rescue
-        [40, 100]
-      end
+
+      `stty size`.split.map(&:to_i)
+    rescue
+      [40, 100]
     end
 
-    def initialize(width:, height:)
-      @width, @height = width, height
+    def initialize(width: 0, height: 0)
+      @width = width
+      @height = height
       @rows, @cols = self.class.terminal_size
       @pixel_buffer = []
     end
@@ -38,13 +38,9 @@ module Branding
 
     def print
       @pixel_buffer.each_with_index do |pixel, idx|
-        if (idx % width * pixel.width) >= cols
-          next
-        end
+        next if (idx % width * pixel.width) >= cols
 
-        if idx % max_width == 0
-          STDOUT.puts(ANSI.reset)
-        end
+        STDOUT.puts(ANSI.reset) if idx % max_width == 0
 
         STDOUT.print(pixel)
       end

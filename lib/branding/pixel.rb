@@ -6,7 +6,7 @@ module Branding
   #
   #
   class Pixel
-    def self.load_strategy(pixels, height:, width:)
+    def self.load_strategy(pixels, height: 0, width: 0)
       pixels.each do |pixel_value|
         yield self.new(pixel_value)
       end
@@ -99,7 +99,7 @@ module Branding
 
   class Pixel2x < Pixel
 
-    def self.load_strategy(pixels, height:, width:)
+    def self.load_strategy(pixels, height: 0, width: 0)
       matrix = Matrix.build(height, width) do |row, col|
         pixels[col + row*width]
       end

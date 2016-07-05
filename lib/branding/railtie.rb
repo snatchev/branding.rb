@@ -1,6 +1,5 @@
 module Branding
   class Railtie < Rails::Railtie
-
     unless Rails.env.production?
       initializer('branding.print_logo') do
         begin

@@ -8,5 +8,4 @@ require 'branding/version'
 require 'branding/railtie' if defined?(Rails)
 
 module Branding
-
 end
